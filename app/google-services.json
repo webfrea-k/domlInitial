@@ -1,0 +1,81 @@
+{
+  "project_info": {
+    "project_number": "167395931565",
+    "firebase_url": "https://admob-app-id-3010130871.firebaseio.com",
+    "project_id": "admob-app-id-3010130871",
+    "storage_bucket": "admob-app-id-3010130871.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167395931565:android:839fa38a27e0b4ae",
+        "android_client_info": {
+          "package_name": "webfreak.si.rainradar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167395931565-egdllqkbd14jclq6e8spgco5jtm6g8re.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "webfreak.si.rainradar",
+            "certificate_hash": "c5726ba7990e019f737b7a57750b57fdb2301250"
+          }
+        },
+        {
+          "client_id": "167395931565-4feufhhc01ru3g0k5pdqsmpjjdtdtib6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKiK8Xl7p4J356Zso8wexMl8dqQ09YmQs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167395931565:android:a479a15014d2c357",
+        "android_client_info": {
+          "package_name": "webfreak.si.daysofmylife2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167395931565-4feufhhc01ru3g0k5pdqsmpjjdtdtib6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKiK8Xl7p4J356Zso8wexMl8dqQ09YmQs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="@dimen/widget_margin"
+              android:background="#55000000"
+              android:weightSum="1">
+
+    <!--<ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_launcher"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/constantText"
+        android:textColor="@android:color/white"
+        android:text="Enjoy your day on earth."
+        android:layout_height="wrap_content"/>
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/words"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingTop="20dp"/>
+    <TextView
+        android:id="@+id/empty_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:text="" >
+    </TextView>
+</RelativeLayout>
