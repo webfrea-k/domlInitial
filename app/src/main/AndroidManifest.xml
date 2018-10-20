@@ -75,7 +75,7 @@
             android:exported="false">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/filepaths" />
         </provider>
-        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-9883575696396484~9731006871"/>
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-9883575696396484~4631354970"/>
 
     </application>
 
