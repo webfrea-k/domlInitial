@@ -54,7 +54,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
-public class MainActivity extends AppCompatActivity implements LoadJSONTask.Listener, AdapterView.OnItemClickListener
+public class MainActivity extends AppCompatActivity implements  AdapterView.OnItemClickListener
 {
     Thread t;
     WebView w;
@@ -110,14 +110,12 @@ public class MainActivity extends AppCompatActivity implements LoadJSONTask.List
         FloatingActionButton myFab = (FloatingActionButton)  findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), PersonEditor.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getBaseContext(), PersonEditor.class);
+                //startActivity(intent);
             }
         });
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mListView = (ListView) findViewById(R.id.outlived_list);
-        //mListView.setOnItemClickListener(this);
-        new LoadJSONTask(this).execute();
         final ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
@@ -183,41 +181,7 @@ public class MainActivity extends AppCompatActivity implements LoadJSONTask.List
         t.start();
         Intent intent = getIntent();
         String share = intent.getAction();
-        if(share == Intent.ACTION_MEDIA_SHARED)
-        {
-            viewPager.setCurrentItem(2);
-        }
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
-        //Bundle myExtrasBundle = new Bundle();
-        //myExtrasBundle.putString("some_key", "some_value");
-        dispatcher.cancelAll();
 
-        Job myJob = dispatcher.newJobBuilder()
-                // the JobService that will be called
-                .setService(DailyJob.class)
-                // uniquely identifies the job
-                .setTag("my-unique-tag")
-                // one-off job
-                .setRecurring(true)
-                // don't persist past a device reboot
-                .setLifetime(Lifetime.FOREVER)
-                // start between 0 and 60 seconds from now
-                .setTrigger(Trigger.executionWindow(periodicity, periodicity + toleranceInterval))
-                // don't overwrite an existing job with the same tag
-                .setReplaceCurrent(true)
-                // retry with exponential backoff
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                // constraints that need to be satisfied for the job to run
-                //.setConstraints(
-                        // only run on an unmetered network
-                        //Constraint.ON_UNMETERED_NETWORK
-                        // only run when the device is charging
-                        //Constraint.ON_CHARGING
-                //)
-                //.setExtras(myExtrasBundle)
-                .build();
-
-        dispatcher.mustSchedule(myJob);
     }
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
@@ -226,60 +190,6 @@ public class MainActivity extends AppCompatActivity implements LoadJSONTask.List
 
         mInterstitialAd.loadAd(adRequest);
     }
-    @Override
-    public void onLoaded(List<Celebrity> androidListLoaded) {
-        long user_birthday_long = Utils.getPrefLong("USER_BIRTHDAY",getApplicationContext());
-        DateTime current_date = new DateTime();
-        current_date = current_date.withHourOfDay(0).withMinuteOfHour(1);
-        long millisalive = current_date.getMillis() - user_birthday_long;
-        int daysAlive = (int) TimeUnit.MILLISECONDS.toDays(millisalive);
-        androidList = androidListLoaded;
-        for (Celebrity celebrity : androidList)
-        {
-
-            HashMap<String, String> map = new HashMap<>();
-
-            map.put(KEY_NAME, celebrity.getName());
-            int days_difference = daysAlive - parseInt(celebrity.getDaysAlive());
-            String outlived_diff = String.valueOf(days_difference);
-
-            if(outlived_diff.startsWith("-"))
-            {
-                int numberOfDaysDifference = Integer.parseInt(outlived_diff.substring(1));
-                if(numberOfDaysDifference>365)
-                {
-                    double years = (double)numberOfDaysDifference/(double) 365;
-                    String text = String.format(Locale.US, "%.2f", years )+ " years more to outlive";
-                    map.put(KEY_DAYSALIVE, text);
-                }
-                else
-                {
-                    String text = outlived_diff.substring(1)+ " days more to outlive";
-                    map.put(KEY_DAYSALIVE, text);
-                }
-            }
-            else
-            {
-                int numberOfDaysDifference = Integer.parseInt(outlived_diff);
-                if(numberOfDaysDifference>365)
-                {
-                    double years = (double)numberOfDaysDifference/(double) 365;
-                    String text = "Outlived by " + String.format(Locale.US, "%.2f", years ) + " years";
-                    map.put(KEY_DAYSALIVE, text);
-                }
-                else
-                {
-                    String text = "Outlived by " + numberOfDaysDifference + " days";
-                    map.put(KEY_DAYSALIVE, text);
-                }
-            }
-            mAndroidMapList.add(map);
-        }
-
-        Utils.getNextPersonToOutliveSelf(androidList, getApplicationContext());
-        Utils.getNextPersonsToOutliveOthers(androidList, getApplicationContext());
-        loadListView();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -287,13 +197,6 @@ public class MainActivity extends AppCompatActivity implements LoadJSONTask.List
         Toast.makeText(this, mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_LONG).show();
     }
 
-
-
-    @Override
-    public void onError() {
-
-        Toast.makeText(this, "Error !", Toast.LENGTH_SHORT).show();
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

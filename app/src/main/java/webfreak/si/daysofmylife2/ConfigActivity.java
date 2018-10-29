@@ -59,14 +59,6 @@ public class ConfigActivity extends Activity implements View.OnClickListener
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(Activity.RESULT_OK, intent);
 
-        // start your service
-        // to fetch data from web
-        Intent serviceIntent = new Intent(this, RemoteFetchService.class);
-        serviceIntent
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        startService(serviceIntent);
-
-        // finish this activity
         this.finish();
 
     }

@@ -39,7 +39,7 @@ import static webfreak.si.daysofmylife2.R.id.card_view_spinner;
  * Created by simon.hocevar on 15.03.2017.
  */
 
-public class Fragment1 extends Fragment implements LoadJSONTask.Listener{
+public class Fragment1 extends Fragment {
     View rootView;
     TextView seconds;
     WebView w;
@@ -78,19 +78,8 @@ public class Fragment1 extends Fragment implements LoadJSONTask.Listener{
         friendsSpinner.setAdapter(adapter);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        TinyDB db = new TinyDB(getContext());
         nextToOutlive.setText(Utils.getPref("WHOS_NEXT",getContext()));
-        if(db.getListString("PEOPLES").size() > 0)
-        {
-            friendsCard.setVisibility(View.VISIBLE);
-            list = db.getListString("PEOPLES");
-            list.add(0,"You");
-            adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            adapter.notifyDataSetChanged();
-            friendsSpinner.setAdapter(adapter);
 
-        }
         friendsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -186,7 +175,6 @@ public class Fragment1 extends Fragment implements LoadJSONTask.Listener{
                 {
                     // TODO Auto-generated method stub
                     DateTime dt = new DateTime();
-                    new LoadJSONTask(Fragment1.this).execute();
                     dt = dt.withDate(selectedyear,selectedmonth+1,selectedday);
                     Utils.putPrefLong("USER_BIRTHDAY", dt.getMillis(), getContext());
                     edt.setText(dt.toString("d.M.yyyy"));
@@ -331,27 +319,5 @@ public class Fragment1 extends Fragment implements LoadJSONTask.Listener{
             }
         });
         return rootView;
-    }
-
-    @Override
-    public void onLoaded(List<Celebrity> andridListWeb) {
-        androidList = andridListWeb;
-        Utils.getNextPersonToOutliveSelf(androidList, getContext());
-        nextToOutlive.setText(Utils.getPref("WHOS_NEXT",getContext()));
-        Utils.getNextPersonsToOutliveOthers(androidList,getContext());
-        allTaskFinished = true;
-        if(shouldRestartApp)
-        {
-            getActivity().finish();
-            getActivity().overridePendingTransition(0, 0);
-            startActivity(getActivity().getIntent());
-            getActivity().overridePendingTransition(0, 0);
-        }
-    }
-
-    @Override
-    public void onError()
-    {
-
     }
 }

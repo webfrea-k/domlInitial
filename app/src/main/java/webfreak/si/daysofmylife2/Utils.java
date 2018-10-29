@@ -221,75 +221,6 @@ public class Utils
         canvasSignature2.restore();
 
         return bitmap;
-
-
-        /*
-
-        // prepare canvas
-        Resources resources = gContext.getResources();
-        float scale = resources.getDisplayMetrics().density;
-        Bitmap bitmap = gResId;
-        android.graphics.Bitmap.Config bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
-
-        bitmap = bitmap.copy(bitmapConfig, true);
-        Canvas canvas = new Canvas(bitmap);
-        Canvas canvasSignature = new Canvas(bitmap);
-        // set text width to canvas width minus 16dp padding
-        int textWidth = canvas.getWidth() - (int) (16 * scale);
-        TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        TextPaint signature = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        // init StaticLayout for text
-        StaticLayout textLayout = new StaticLayout(gText, paint, textWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-        StaticLayout signatureLayout = new StaticLayout("#DaysOfMyLife", signature, textWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-
-        //android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
-
-        // resource bitmaps are imutable,
-        // so we need to convert it to mutable one
-
-
-
-        // new antialiased Paint
-        // get position of text's top left corner
-        int textHeight = textLayout.getHeight();
-        float x = (bitmap.getWidth() - textWidth)/2;
-        float y = (bitmap.getHeight() - textHeight)/2;
-
-        
-        //Rect r = new Rect(0, ((int) y), 1600, textHeight);
-        //paint.setStyle(Paint.Style.FILL);
-        //paint.setColor(Color.MAGENTA);
-        //canvas.drawRect(r, paint);
-        // text color - #3D3D3D
-        paint.setColor(Color.WHITE);
-        signature.setColor(Color.WHITE);
-        // text size in pixels
-        paint.setTextSize((int) (45 * scale));
-        signature.setTextSize((int) (30 * scale));
-        // text shadow
-        
-        //canvas.drawRect(199,100,125,100,paint);
-
-        //paint.setShadowLayer(1f, 10f, 10f, Color.BLACK);
-        signature.setShadowLayer(1f, 10f, 10f, Color.BLACK);
-
-        
-        // get height of multiline text
-        
-
-        
-        // draw text to the Canvas center
-        canvas.save();
-        canvasSignature.save();
-        canvas.translate(x, y);
-        canvasSignature.translate(1000, 850);
-        textLayout.draw(canvas);
-        textLayout.draw(canvas);
-        signatureLayout.draw(canvasSignature);
-        canvas.restore();
-        canvasSignature.restore();
-
-        return bitmap;*/
     }
 
     public static void showNotification(Context context, String user, String celebrity)
@@ -367,56 +298,7 @@ public class Utils
         }
         return Utils.getPref("WHOS_NEXT", ctx);
     }
-    public static void getNextPersonsToOutliveOthers(List<Celebrity> androidList, Context ctx)
-    {
-        boolean whosNext;
 
-        TinyDB db = new TinyDB(ctx);
-        if(db.getListString("PEOPLES").size() > 0)
-        {
-            for (int i = 0; i < db.getListString("PEOPLES").size(); i++)
-            {
-                whosNext = true;
-                for (Celebrity celebrity : androidList)
-                {
-                    String user = db.getListString("PEOPLES").get(i) + "_BIRTHDAY_MILLIS";
-                    long user_birthday_long = Utils.getPrefLong(user, ctx);
-                    DateTime current_date = new DateTime();
-                    current_date = current_date.withHourOfDay(0).withMinuteOfHour(1);
-                    long millisalive = current_date.getMillis() - user_birthday_long;
-                    int daysAlive = (int) TimeUnit.MILLISECONDS.toDays(millisalive);
-                    int days_difference = daysAlive - parseInt(celebrity.getDaysAlive());
-                    String outlived_diff = String.valueOf(days_difference);
-
-                    if (outlived_diff.startsWith("-"))
-                    {
-                        int numberOfDaysDifference = Integer.parseInt(outlived_diff.substring(1));
-                        if (numberOfDaysDifference > 365)
-                        {
-                            double years = (double) numberOfDaysDifference / (double) 365;
-                            if (whosNext)//Get the first celebrity to outlive
-                            {
-                                Utils.putPref("WHOS_NEXT_" + db.getListString("PEOPLES").get(i), celebrity.getName().trim() + ", " + String.format(Locale.US, "%.2f", years) + " years more.", ctx);
-                            }
-
-                        } else
-                        {
-                            if (whosNext)//Get the first celebrity to outlive
-                            {
-                                Utils.putPref("WHOS_NEXT_" + db.getListString("PEOPLES").get(i), celebrity.getName().trim() + ", " + outlived_diff.substring(1) + " days more.", ctx);
-                            }
-                        }
-                        whosNext = false;
-                    } else if (outlived_diff.startsWith("0"))
-                    {
-                        Utils.putPref("WHOS_NEXT_" + db.getListString("PEOPLES").get(i), db.getListString("PEOPLES").get(i) + " has just outlived " + celebrity.getName().trim(), ctx);
-                        whosNext = false;
-                    }
-
-                }
-            }
-        }
-    }
     public static void requestNewInterstitial(InterstitialAd mInterstitialAd, Context ctx) {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(ctx.getString(R.string.banner_device_id))
@@ -424,43 +306,4 @@ public class Utils
 
         mInterstitialAd.loadAd(adRequest);
     }
-    public static boolean isAnybodyHavingBirthday(Context ctx)
-    {
-        DateTime dt = new DateTime();
-        boolean thereIsABirthday = false;
-        //Check for birthdays
-        ArrayList<String> list = new ArrayList<String>();
-        TinyDB db = new TinyDB(ctx);
-        list.add("You");
-        if(db.getListString("PEOPLES").size() > 0)
-        {
-            list = db.getListString("PEOPLES");
-        }
-        for(String item : list)
-        {
-            if(item.equals("You"))
-            {
-                long user_birthday_long = Utils.getPrefLong("USER_BIRTHDAY",ctx);
-                DateTime birthday = new DateTime(Long.valueOf(user_birthday_long));
-                if(dt.getDayOfMonth() == birthday.getDayOfMonth() && dt.getMonthOfYear() == birthday.getMonthOfYear())
-                {
-                    Utils.putPref("DAILY_QUOTE","Happy Birthday! :)",ctx);
-                    thereIsABirthday = true;
-                }
-            }
-            else
-            {
-                long other_user_birthday_long = Utils.getPrefLong(item+"_BIRTHDAY_MILLIS", ctx);
-                DateTime birthday = new DateTime(Long.valueOf(other_user_birthday_long));
-                if(dt.getDayOfMonth() == birthday.getDayOfMonth() && dt.getMonthOfYear() == birthday.getMonthOfYear())
-                {
-                    Utils.putPref("DAILY_QUOTE","Happy Birthday "+item+"! :)",ctx);
-                    thereIsABirthday = true;
-                }
-            }
-
-        }
-        return  thereIsABirthday;
-    }
-
 }

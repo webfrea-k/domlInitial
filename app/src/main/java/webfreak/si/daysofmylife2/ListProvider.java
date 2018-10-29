@@ -26,11 +26,6 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory{
     }
 
     private void populateListItem() {
-        if(RemoteFetchService.listItemList !=null )
-            listItemList = RemoteFetchService.listItemList;
-        else
-            listItemList = new ArrayList<String>();
-
     }
 
     @Override
@@ -101,83 +96,3 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory{
     }
 
 }
-/*
-public class ListProvider implements RemoteViewsService.RemoteViewsFactory
-{
-
-    private ArrayList listItemList = new ArrayList();
-    private Context context = null;
-    private int appWidgetId;
-
-    public ListProvider(Context context, Intent intent) {
-        this.context = context;
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-
-        populateListItem();
-    }
-
-    private void populateListItem()
-    {
-        listItemList.add(Utils.getPref("DAILY_QUOTE", context));
-
-    }
-
-    @Override
-    public void onCreate()
-    {
-
-    }
-
-    @Override
-    public void onDataSetChanged()
-    {
-
-    }
-
-    @Override
-    public void onDestroy()
-    {
-
-    }
-
-    @Override
-    public int getCount() {
-        return listItemList.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public boolean hasStableIds()
-    {
-        return false;
-    }
-
-    @Override
-    public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.list_single_item);
-        Object listItem = listItemList.get(position);
-        remoteView.setTextViewText(R.id.name, listItem.toString());
-        Bundle extras = new Bundle();
-        extras.putInt(WidgetProvider.EXTRA_WORD, position);
-        Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-        remoteView.setOnClickFillInIntent(R.id.item_frame, fillInIntent);
-        return remoteView;
-    }
-
-    @Override
-    public RemoteViews getLoadingView()
-    {
-        return null;
-    }
-
-    @Override
-    public int getViewTypeCount()
-    {
-        return 1;
-    }
-    */
